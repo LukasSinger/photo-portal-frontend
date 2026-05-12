@@ -1,0 +1,7 @@
+<p-card id="portal-card" header="Cutthroat Visuals">
+    <ng-template #subtitle>Secure Client Portal</ng-template>
+    <span>Enter passcode:</span>
+    <p-password [(ngModel)]="passcode" [feedback]="false" autocomplete="off" placeholder="••••••" (keypress)="passcodeSubmit($event)" />
+    <span id="invalid-passcode">{{tryAgain()}}</span>
+    <p-button label="Unlock" [loading]="loading()" (onClick)="authenticate()"></p-button>
+</p-card>

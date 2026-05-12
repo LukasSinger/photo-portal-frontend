@@ -1,0 +1,22 @@
+.collections {
+    display: flex;
+    flex-flow: row wrap;
+    gap: 1rem;
+}
+
+.collections > a {
+    text-decoration: none;
+}
+
+.collection-card {
+    width: 20rem;
+    transition: transform 0.2s;
+}
+
+.collection-card:hover {
+    transform: translateY(-0.25rem);
+}
+
+::ng-deep .collection-card .p-card-content {
+    display: none;
+}

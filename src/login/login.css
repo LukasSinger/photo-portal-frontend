@@ -1,0 +1,38 @@
+:host {
+    justify-content: center;
+    align-items: center;
+    flex: 1 0 auto;
+}
+
+#portal-card {
+    width: 600px;
+    margin-top: -3rem;
+    text-align: center;
+}
+
+::ng-deep #portal-card .p-card-title {
+    font-family: "Oswald", sans-serif;
+    font-size: 2rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+::ng-deep #portal-card .p-card-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 2rem;
+}
+
+::ng-deep .p-password-input {
+    text-align: center;
+}
+
+::ng-deep #portal-card .p-button {
+    width: 15rem;
+}
+
+#invalid-passcode {
+    color: #ff5252;
+}

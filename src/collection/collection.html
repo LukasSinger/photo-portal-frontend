@@ -1,0 +1,90 @@
+<div class="main">
+    <div class="page-header">
+        <h1>{{name()}}</h1>
+        @if (loginService.isPhotographer()) { <p-button label="New shoot" icon="pi pi-plus" (onClick)="showNewShootDialog()"></p-button> }
+    </div>
+    @if (!hasLoaded()) {
+    <p-progress-spinner />
+    } @else {
+    <p-table [value]="photos()" sortField="date" [paginator]="true" [rows]="10" [loading]="isUpdating()">
+        <ng-template #header>
+            <tr>
+                <th width="300px"></th>
+                <th>Label</th>
+                <th pSortableColumn="date">Date <p-sortIcon field="date" /></th>
+                <th>Location</th>
+                @if (loginService.isPhotographer()) {
+                <th width="50px"></th>
+                }
+            </tr>
+            <tr>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th>
+                    <p-columnFilter type="text" field="location" placeholder="Type to search" [showMenu]="false" filterOn="input"></p-columnFilter>
+                </th>
+                @if (loginService.isPhotographer()) {
+                <th></th>
+                }
+            </tr>
+        </ng-template>
+        <ng-template #body let-photo>
+            <tr>
+                <td><p-image [src]="photo.url" width="250" [preview]="true" /></td>
+                <td>{{ photo.label }}</td>
+                <td>{{ photo.date }}</td>
+                <td>{{ photo.location }}</td>
+                @if (loginService.isPhotographer()) {
+                <td><p-button severity="danger" icon="pi pi-trash" (onClick)="deletePhoto(photo.photo_id)" /></td>
+                }
+            </tr>
+        </ng-template>
+    </p-table>
+    }
+</div>
+<p-dialog header="Add New Shoot" [modal]="true" [(visible)]="newShootDialogShowing">
+    <div class="form-row">
+        <label for="newShootDate">Shoot date</label>
+        <p-date-picker id="newShootDate" [(ngModel)]="newShootDate" placeholder="mm/dd/yyyy" pInputMask="99/99/9999" [iconDisplay]="'input'" [showIcon]="true" appendTo="body" required />
+    </div>
+    <div class="form-row">
+        <label for="newShootLocation">Shoot location</label>
+        <input type="text" pInputText id="newShootLocation" [(ngModel)]="newShootLocation" placeholder="Location" required />
+    </div>
+    <div class="form-row">
+        <label for="newShootType">Shoot type</label>
+        <input type="text" pInputText id="newShootType" [(ngModel)]="newShootType" placeholder="Type" required />
+    </div>
+    <p-table [value]="newShootPhotographers()">
+        <ng-template #header>
+            <tr>
+                <th>Photographers</th>
+            </tr>
+        </ng-template>
+        <ng-template #body let-user>
+            <tr>
+                <td><input type="text" pInputText [(ngModel)]="user.name" placeholder="User name" required /></td>
+            </tr>
+        </ng-template>
+    </p-table>
+    <p-button label="Add another user" (onClick)="addUserToForm()" />
+    <p-table [value]="newShootPhotos()">
+        <ng-template #header>
+            <tr>
+                <th>URL</th>
+                <th>Label</th>
+            </tr>
+        </ng-template>
+        <ng-template #body let-photo>
+            <tr>
+                <td><input type="text" pInputText [(ngModel)]="photo.url" placeholder="URL" required /></td>
+                <td><input type="text" pInputText [(ngModel)]="photo.label" placeholder="Label" required /></td>
+            </tr>
+        </ng-template>
+    </p-table>
+    <p-button label="Add another photo" (onClick)="addPhotoToForm()" />
+    <ng-template #footer>
+        <p-button class="form-submit-btn" [loading]="isUpdating()" (onClick)="createShoot()">Add shoot</p-button>
+    </ng-template>
+</p-dialog>

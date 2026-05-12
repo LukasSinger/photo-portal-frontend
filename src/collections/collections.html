@@ -1,0 +1,38 @@
+<div class="main">
+    <div class="page-header">
+        <h1>Your Collections</h1>
+        @if (loginService.isAdmin()) { <p-button label="New collection" icon="pi pi-plus" (onClick)="showNewCollectionDialog()"></p-button> }
+    </div>
+    @if (isUpdating() || collections().length < 1) {
+    <p-progress-spinner />
+    }
+    <div class="collections">
+        @for (item of collections(); track $index) {
+        <a [routerLink]="['/collection',item.collection_id]" [state]="{ name: item.collection_name }">
+            <p-card class="collection-card" [header]="item.collection_name" />
+        </a>
+        }
+    </div>
+</div>
+<p-dialog header="Add New Collection" [modal]="true" [(visible)]="newCollectionDialogShowing">
+    <div class="form-row">
+        <label for="newCollectionName">Name</label>
+        <input type="text" pInputText id="newCollectionName" [(ngModel)]="newCollectionName" placeholder="Name" required />
+    </div>
+    <p-table [value]="newCollectionUsers()">
+        <ng-template #header>
+            <tr>
+                <th>Grant access to...</th>
+            </tr>
+        </ng-template>
+        <ng-template #body let-user>
+            <tr>
+                <td><input type="text" pInputText [(ngModel)]="user.name" placeholder="User name" required /></td>
+            </tr>
+        </ng-template>
+    </p-table>
+    <p-button label="Add another user" (onClick)="addUserToForm()" />
+    <ng-template #footer>
+        <p-button class="form-submit-btn" [loading]="isUpdating()" (onClick)="createCollection()">Add collection</p-button>
+    </ng-template>
+</p-dialog>

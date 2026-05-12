@@ -1,0 +1,57 @@
+<div class="main">
+    <div class="page-header">
+        <h1>Manage Users</h1>
+        <!-- Admin-only page, so don't need to check permissions -->
+        <p-button label="New user" icon="pi pi-plus" (onClick)="showNewUserDialog()"></p-button>
+    </div>
+    @if (!hasLoaded()) {
+    <p-progress-spinner />
+    } @else {
+    <p-table [value]="users()" [paginator]="true" [rows]="20" [loading]="isUpdating()">
+        <ng-template #header>
+            <tr>
+                <th>Name</th>
+                <th>Shoot Count</th>
+                <th width="50px"></th>
+            </tr>
+        </ng-template>
+        <ng-template #body let-user>
+            <tr>
+                <td>{{ user.name }}</td>
+                <td>{{ user.shootCount }}</td>
+                <td><p-button severity="secondary" icon="pi pi-pen-to-square" (onClick)="showEditUserDialog(user)" /></td>
+            </tr>
+        </ng-template>
+    </p-table>
+    }
+</div>
+<p-dialog header="Add New User" [modal]="true" [(visible)]="newUserDialogShowing">
+    <div class="form-row">
+        <label for="newUserType">User type</label>
+        <p-selectbutton id="newUserType" [options]="userTypeOptions" [(ngModel)]="userType" optionLabel="label" optionValue="value" required />
+    </div>
+    <div class="form-row">
+        <label for="newUserName">User name</label>
+        <input pInputText id="newUserName" [(ngModel)]="userName" placeholder="User name" required />
+    </div>
+    <div class="form-row">
+        <label for="newUserPass">User passcode</label>
+        <input pInputText id="newUserPass" [(ngModel)]="userCode" placeholder="••••••" required />
+    </div>
+    <ng-template #footer>
+        <p-button class="form-submit-btn" [loading]="isUpdating()" (onClick)="createUser()">Add user</p-button>
+    </ng-template>
+</p-dialog>
+<p-dialog header="Update Passcode" [modal]="true" [(visible)]="editUserDialogShowing">
+    <div class="form-row">
+        <label>User name</label>
+        <span>{{ editUser()?.name }}</span>
+    </div>
+    <div class="form-row">
+        <label for="newPassword">New passcode</label>
+        <input pInputText id="newPassword" [(ngModel)]="editUserPw" placeholder="••••••" required />
+    </div>
+    <ng-template #footer>
+        <p-button class="form-submit-btn" [loading]="isUpdatingPw()" (onClick)="updatePassword()">Update passcode</p-button>
+    </ng-template>
+</p-dialog>

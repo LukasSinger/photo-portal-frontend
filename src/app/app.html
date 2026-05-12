@@ -1,0 +1,19 @@
+@if (this.router.url !== "/login") {
+<p-toolbar>
+    <ng-template #start>
+        <img src="icon.png" alt="Cutthroat Visuals" width="32px" />
+        <span class="brand-title">Cutthroat Visuals</span>
+    </ng-template>
+    @if (this.loginService.isAdmin()) {
+    <ng-template #center>
+        <p-button label="Collections" severity="secondary" routerLink="/collections" />
+        <p-button label="Users" severity="secondary" routerLink="/users" />
+    </ng-template>
+    }
+    <ng-template #end>
+        <span>{{ loginService.getUserName() }}</span>
+        <p-button label="Sign out" icon="pi pi-sign-out" severity="danger" variant="text" (onClick)="signOut()" />
+    </ng-template>
+</p-toolbar>
+}
+<router-outlet />
